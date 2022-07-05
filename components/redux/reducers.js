@@ -3,12 +3,14 @@ import {
   DECREASE_COUNT,
   COUNTING_PRICE,
   GET_CATEGORIES,
+  GET_PRODUCTS,
 } from './actions';
 
 const initialState = {
   count: 1,
   price: 0,
   categories: [],
+  goods: [], // is products
 };
 
 function userReducer(state = initialState, action) {
@@ -21,6 +23,8 @@ function userReducer(state = initialState, action) {
       return {...state, price: state.price * state.count};
     case GET_CATEGORIES:
       return {...state, categories: action.payload};
+    case GET_PRODUCTS:
+      return {...state, goods: action.payload};
     default:
       return state;
   }

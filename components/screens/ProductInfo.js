@@ -14,14 +14,20 @@ import {COLOURS, Items} from '../databases/Database';
 import Entypo from 'react-native-vector-icons/Entypo';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useSelector, useDispatch} from 'react-redux';
+import {getProducts} from '../redux/actions';
 
 const ProductInfo = ({route, navigation}) => {
   const {ProductID} = route.params;
   const [product, setProduct] = useState({});
+  const {goods} = useSelector(state => state.userReducer);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       getDataFromFB();
+      getDataFromAPI();
+      dispatch(getProducts());
     });
     return unsubscribe;
   }, [navigation]);
@@ -30,6 +36,15 @@ const ProductInfo = ({route, navigation}) => {
     for (let index = 0; index < Items.length; index++) {
       if (Items[index].id == ProductID) {
         await setProduct(Items[index]);
+        return;
+      }
+    }
+  };
+
+  const getDataFromAPI = async () => {
+    for (let index = 0; index < goods.length; index++) {
+      if (goods[index].id == ProductID) {
+        await setProduct(goods[index]);
         return;
       }
     }
@@ -129,6 +144,7 @@ const ProductInfo = ({route, navigation}) => {
             data={product.productImageList ? product.productImageList : null}
             horizontal
             renderItem={renderProduct}></FlatList>
+
           {/* <View
             style={{
               // width: '100%',

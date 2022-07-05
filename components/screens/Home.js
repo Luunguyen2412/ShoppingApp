@@ -10,17 +10,18 @@ import {
   FlatList,
   SafeAreaView,
   Button,
+  Dimensions,
 } from 'react-native';
 import Entypo from 'react-native-vector-icons/Entypo';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {COLOURS, Items} from '../databases/Database';
 import {useSelector, useDispatch} from 'react-redux';
-import {getCategories} from '../redux/actions';
+import {getCategories, getProducts} from '../redux/actions';
 import {Dropdown, MultiSelect} from 'react-native-element-dropdown';
 
 const Home = ({navigation}) => {
   const [products, setProducts] = useState([]);
-  const {categories} = useSelector(state => state.userReducer);
+  const {categories, goods} = useSelector(state => state.userReducer);
   const [dropdown, setDropdown] = useState([]);
   const [selected, setSelected] = useState([]);
   const [isFocus, setIsFocus] = useState(false);
@@ -31,6 +32,7 @@ const Home = ({navigation}) => {
     const unsubscribe = navigation.addListener('focus', () => {
       getDataFromFB();
       dispatch(getCategories());
+      dispatch(getProducts());
     });
     return unsubscribe;
   }, [navigation]);
@@ -166,64 +168,65 @@ const Home = ({navigation}) => {
             }}>
             MWG Shop & Services
           </Text>
-          <View>
-            <FlatList
-              contentContainerStyle={{
-                alignSelf: 'flex-start',
-                justifyContent: 'space-between',
-                alignContent: 'space-between',
-              }}
-              numColumns={2}
-              data={categories}
-              renderItem={({item}) => (
-                <Text
-                  style={{
-                    fontSize: 14,
-                    color: COLOURS.black,
-                    fontWeight: '400',
-                    letterSpacing: 1,
-                  }}>
-                  {item.name}
-                </Text>
-              )}
-              keyExtractor={(item, index) => index.toString()}></FlatList>
+
+          <View
+            style={{
+              marginHorizontal: 16,
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+            }}>
+            <Text
+              style={{
+                fontSize: 18,
+                color: COLOURS.black,
+                fontWeight: '500',
+                letterSpacing: 1,
+              }}>
+              Categories
+            </Text>
+            <TouchableOpacity>
+              <Text style={{color: COLOURS.blue}}>SEE ALL</Text>
+            </TouchableOpacity>
           </View>
 
-          <ScrollView horizontal={true} style={{height: '10%'}}>
+          <ScrollView
+            horizontal={true}
+            style={{
+              marginTop: 15,
+              height: Dimensions.get('screen').height * 0.18,
+            }}>
             {categories.map(item => {
               return (
-                <TouchableOpacity key={item.id}>
-                  <View style={{flexDirection: 'column', padding: 10}}>
-                    <Text
+                <TouchableOpacity
+                  key={item.id}
+                  style={{
+                    width: Dimensions.get('window').width * 0.3,
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}>
+                  <View style={{height: 100, width: 100}}>
+                    <Image
+                      source={{uri: item.image}}
                       style={{
-                        fontSize: 14,
-                        color: COLOURS.blue,
-                        fontWeight: '400',
-                        letterSpacing: 1,
-                        padding: 10,
-                      }}>
-                      {item.name}
-                    </Text>
-                    <View
-                      style={{
-                        width: '100%',
-                        borderRadius: 10,
-                        height: '50%',
-                        backgroundColor: COLOURS.backgroundMedium,
-                        position: 'relative',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                      }}>
-                      <Image
-                        source={item.image}
-                        style={{
-                          width: '80%',
-                          height: '80%',
-                          resizeMode: 'contain',
-                        }}
-                      />
-                    </View>
+                        width: '80%',
+                        height: '80%',
+                        resizeMode: 'contain',
+                        alignSelf: 'center',
+                      }}
+                    />
                   </View>
+                  <Text
+                    style={{
+                      fontSize: 14,
+                      color: COLOURS.blue,
+                      fontWeight: '400',
+                      letterSpacing: 1,
+                      marginBottom: 10,
+                    }}>
+                    {item.name}
+                  </Text>
                 </TouchableOpacity>
               );
             })}
@@ -284,7 +287,7 @@ const Home = ({navigation}) => {
             renderItem={item => _renderItemSelected(item)}
           />
         </View>
-        <View style={{padding: 16}}>
+        <View style={{padding: 16, paddingBottom: 150}}>
           <View
             style={{
               padding: 16,
@@ -301,7 +304,8 @@ const Home = ({navigation}) => {
               }}>
               Products
             </Text>
-            <TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => navigation.navigate('AllProducts')}>
               <Text style={{color: COLOURS.blue}}>SEE ALL</Text>
             </TouchableOpacity>
           </View>
@@ -320,6 +324,7 @@ const Home = ({navigation}) => {
     </SafeAreaView>
   );
 };
+export default Home;
 
 const dataDropdown = [
   {label: 'Item 1', value: '1'},
@@ -369,5 +374,3 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 });
-
-export default Home;

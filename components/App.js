@@ -28,24 +28,40 @@ import {
 
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import Home from './screens/Home';
+
 import MyCart from './screens/MyCart';
 import ProductInfo from './screens/ProductInfo';
 import {Provider} from 'react-redux';
 import {Store} from './redux/store';
+import Home from './screens/Home';
+import AllProducts from './screens/AllProducts';
 
 const App = () => {
   const Stack = createNativeStackNavigator();
   return (
     <Provider store={Store}>
       <NavigationContainer>
-        <Stack.Navigator
-          screenOptions={{
-            headerShown: false,
-          }}>
-          <Stack.Screen name="Home" component={Home} />
-          <Stack.Screen name="MyCart" component={MyCart} />
-          <Stack.Screen name="ProductInfo" component={ProductInfo} />
+        <Stack.Navigator>
+          <Stack.Screen
+            options={{headerShown: false}}
+            name="Home"
+            component={Home}
+          />
+          <Stack.Screen
+            options={{headerShown: false}}
+            name="MyCart"
+            component={MyCart}
+          />
+          <Stack.Screen
+            options={{headerShown: false}}
+            name="ProductInfo"
+            component={ProductInfo}
+          />
+          <Stack.Screen
+            options={{headerShown: true}}
+            name="AllProducts"
+            component={AllProducts}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>

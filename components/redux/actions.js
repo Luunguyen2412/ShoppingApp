@@ -2,14 +2,18 @@ export const INCREASE_COUNT = 'INCREASE_COUNT';
 export const DECREASE_COUNT = 'DECREASE_COUNT';
 export const COUNTING_PRICE = 'COUNTING_PRICE';
 export const GET_CATEGORIES = 'GET_CATEGORIES';
+export const GET_PRODUCTS = 'GET_PRODUCTS';
 
 const API_URL =
   'https://raw.githubusercontent.com/tikivn/miniapp-getting-started/main/shop/src/services/mock/categories.json';
 
+const BASE_URL =
+  'https://raw.githubusercontent.com/tikivn/miniapp-getting-started/main/shop/src/services/mock';
+
 export const request = async ({path, method = 'GET', headers = {}, data}) => {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve, reject) => { // error in Promiss: check after
     my.request({
-      URL: `${API_URL}/${path}.json`,
+      URL: `${BASE_URL}/${path}.json`,
       headers: {
         'Content-Type': 'application/json',
         ...headers,
@@ -27,7 +31,26 @@ export const request = async ({path, method = 'GET', headers = {}, data}) => {
 };
 
 export const getProducts = () => {
-  return request({path: '/products'});
+  //return request({path: '/products'});
+  try {
+    return async dispatch => {
+      const result = await fetch('https://raw.githubusercontent.com/tikivn/miniapp-getting-started/main/shop/src/services/mock/products.json', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      const json = await result.json();
+      if (json) {
+        dispatch({
+          type: GET_PRODUCTS,
+          payload: json,
+        });
+      }
+    };
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 export const getCategories = () => {
