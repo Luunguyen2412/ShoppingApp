@@ -7,7 +7,6 @@
  */
 
 import React from 'react';
-import type {Node} from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -18,16 +17,9 @@ import {
   View,
 } from 'react-native';
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
 import MyCart from './screens/MyCart';
 import ProductInfo from './screens/ProductInfo';
@@ -35,6 +27,20 @@ import {Provider} from 'react-redux';
 import {Store} from './redux/store';
 import Home from './screens/Home';
 import AllProducts from './screens/AllProducts';
+import News from './screens/News';
+import Profile from './screens/Profile';
+
+const Tab = createBottomTabNavigator();
+
+const mainTab = () => {
+  return (
+    <Tab.Navigator>
+      <Tab.Screen name="Home" component={Home} />
+      <Tab.Screen name="News" component={News} />
+      <Tab.Screen name="Profile" component={Profile} />
+    </Tab.Navigator>
+  );
+};
 
 const App = () => {
   const Stack = createNativeStackNavigator();
@@ -44,9 +50,14 @@ const App = () => {
         <Stack.Navigator>
           <Stack.Screen
             options={{headerShown: false}}
+            name="mainTab"
+            component={mainTab}
+          />
+          {/* <Stack.Screen
+            options={{headerShown: false}}
             name="Home"
             component={Home}
-          />
+          /> */}
           <Stack.Screen
             options={{headerShown: false}}
             name="MyCart"
@@ -67,24 +78,5 @@ const App = () => {
     </Provider>
   );
 };
-
-const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-});
 
 export default App;

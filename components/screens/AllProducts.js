@@ -33,7 +33,6 @@ const AllProducts = ({navigation}) => {
         backgroundColor: COLOURS.white,
         position: 'relative',
       }}>
-      {/* <CarouselCards /> */}
       <FlatList
         style={{
           marginVertical: 15,
